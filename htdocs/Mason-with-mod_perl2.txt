@@ -63,7 +63,7 @@ DESCRIPTION
     <http://masonhq.com/docs/manual/Admin.html>.
 
 NAME CHANGE
-    I have changed module names and released them as version 0.04 as perl
+    I have changed module names and released them as of version 0.04 as perl
     Mason's request:
 
         HTML::Mason::ApacheHandler2 =>
@@ -72,10 +72,29 @@ NAME CHANGE
         MasonX::Request::WithApacheSession2 =>
             MasonX::Request::WithApache2Session
 
-    These changes keep my modules out of the 'core' Mason namespace. Those
+    These changes keep my modules out of the 'core' Mason name space. Those
     of you who have installed my prior modules are encouraged to install the
     new modules and make the necessary changes to the configuration files
     and scripts.
+
+'$r' IN 0.05
+    The '$r' passed to Mason pages has been changed from type
+    'Apache::Request' to 'Apache::RequestRec' to conform to the parameter
+    passed to mod_perl 2 handlers in version 0.05. This WILL break your
+    Mason pages that currently use '$r'. To get the corresponding
+    'Apache::Request' in your pages under 0.05, do:
+
+       $rr = Apache::Request->new( $r );
+
+    $rr' is now an 'Apache::Request', while '$r' is an 'Apache::RequestRec'.
+
+    There is a web page in eg/request-examiner.html that displays the type
+    and interface provided by '$r' in your Mason pages. You may want to try
+    this page on your system. Further information may be found on the mod
+    perl site, specifically:
+    <http://perl.apache.org/docs/2.0/user/porting/compat.html#Request_Object
+    _Methods> and
+    <http://perl.apache.org/docs/2.0/api/Apache/RequestRec.html>.
 
 PREREQUISITES
     You must have the following packages installed:
@@ -233,7 +252,7 @@ CONFIGURATION
           PerlSetVar MasonRequestClass          MasonX::Request::WithApache2Session
           PerlSetVar MasonSessionAllowInvalidId yes
           PerlSetVar MasonSessionCookieName     beaucox-bctest-cookie
-          PerlSetVar MasonSessionCookieDomain   .beaucox.com
+          PerlSetVar MasonSessionCookieDomain   beaucox.com
           PerlSetVar MasonSessionCookieExpires  +7d
           PerlSetVar MasonSessionClass          Apache::Session::MySQL
           PerlSetVar MasonSessionDataSource     dbi:mysql:bctest_sessions
@@ -647,6 +666,23 @@ TODO
         reworked to operate with Apache2Handler; I will attack those on
         demand. Please let me know.
 
+A COMPLETELY OT COMMENT ON 'MasonSessionCookieDomain'
+    As an aside, I have found that some browsers, mainly Mozilla, cannot
+    cope with the leading 'dot' in the '-domain' parameter sent in the
+    'Set-Cookie' header (you specify the '-domain' in the
+    'MasonSessionCookieDomain' configuration directive or the
+    'session_cookie_domain' parameter in your handler). I suggest you leave
+    it out, i.e. change:
+
+        .beaucox.com
+
+    to:
+
+        beaucox.com
+
+    This makes Mozilla happy and works on the other browsers I have tested
+    (IE, Konqueror).
+
 BUGS
     Too early to tell; they are bound to come in as people give it a try.
 
@@ -657,7 +693,7 @@ AUTHOR
     including: Jonathan Swartz <swartz@pobox.com>, Dave Rolsky
     <autarch@urth.org>, Ken Williams <ken@mathforum.org>.
 
-    Version 0.04 as of March 21, 2004.
+    Version 0.05 as of April 13, 2004.
 
 SEE ALSO
     My documents, including: MasonX::Apache2Handler,

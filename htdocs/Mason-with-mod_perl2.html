@@ -21,6 +21,7 @@ width="100%">
 	<li><a href="#synopsis">SYNOPSIS</a></li>
 	<li><a href="#description">DESCRIPTION</a></li>
 	<li><a href="#name_change">NAME CHANGE</a></li>
+	<li><a href="#__r__in_0_05">'$r' IN 0.05</a></li>
 	<li><a href="#prerequisites">PREREQUISITES</a></li>
 	<li><a href="#warning__perl_5_8_2">WARNING: PERL 5.8.2</a></li>
 	<li><a href="#flush_buffer_and_redirects">FLUSH BUFFER AND REDIRECTS</a></li>
@@ -49,6 +50,7 @@ width="100%">
 	<li><a href="#don_t">DON'T</a></li>
 	<li><a href="#do">DO</a></li>
 	<li><a href="#todo">TODO</a></li>
+	<li><a href="#a_completely_ot_comment_on__masonsessioncookiedomain_">A COMPLETELY OT COMMENT ON 'MasonSessionCookieDomain'</a></li>
 	<li><a href="#bugs">BUGS</a></li>
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
@@ -132,7 +134,7 @@ width="100%">
 <tr><td><a name="name_change">NAME CHANGE</a><a name="__H1_4__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
 <td align="right" class="ref_back_color"><a href="#__H1_3__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;DESCRIPTION</td>
 </tr></table>
-<p>I have changed module names and released them as version 0.04
+<p>I have changed module names and released them as of version 0.04
 as perl Mason's request:</p>
 <pre>
     HTML::Mason::ApacheHandler2 =&gt;
@@ -140,7 +142,7 @@ as perl Mason's request:</p>
 <pre>
     MasonX::Request::WithApacheSession2 =&gt;
         MasonX::Request::WithApache2Session</pre>
-<p>These changes keep my modules out of the 'core' Mason namespace.
+<p>These changes keep my modules out of the 'core' Mason name space.
 Those of you who have installed my prior modules are encouraged to
 install the new modules and make the necessary changes to the
 configuration files and scripts.</p>
@@ -148,8 +150,32 @@ configuration files and scripts.</p>
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="prerequisites">PREREQUISITES</a><a name="__H1_5__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<tr><td><a name="__r__in_0_05">'$r' IN 0.05</a><a name="__H1_5__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
 <td align="right" class="ref_back_color"><a href="#__H1_4__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;NAME CHANGE</td>
+</tr></table>
+<p>The '$r' passed to Mason pages has been changed from type
+'Apache::Request' to 'Apache::RequestRec' to conform
+to the parameter passed to mod_perl 2 handlers in version 0.05.
+This <strong>WILL</strong> break your Mason pages that currently use '$r'.
+To get the corresponding 'Apache::Request' in your
+pages under 0.05, do:</p>
+<pre>
+   $rr = Apache::Request-&gt;new( $r );</pre>
+<p>$rr' is now an 'Apache::Request', while '$r' is
+an 'Apache::RequestRec'.</p>
+<p>There is a web page in <strong>eg/request-examiner.html</strong> that displays
+the type and interface provided by '$r' in your Mason pages. You
+may want to try this page on your system. Further information may be found
+on the mod perl site, specifically:
+<a href="http://perl.apache.org/docs/2.0/user/porting/compat.html#Request_Object_Methods">http://perl.apache.org/docs/2.0/user/porting/compat.html#Request_Object_Methods</a>
+and
+<a href="http://perl.apache.org/docs/2.0/api/Apache/RequestRec.html">http://perl.apache.org/docs/2.0/api/Apache/RequestRec.html</a>.</p>
+<p>
+</p>
+<table class="h1table" cellspacing="0" cellpadding="0" border="0"
+width="100%">
+<tr><td><a name="prerequisites">PREREQUISITES</a><a name="__H1_6__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_5__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;'$r' IN 0.05</td>
 </tr></table>
 <p>You must have the following packages installed:</p>
 <pre>
@@ -162,8 +188,8 @@ width="100%">
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="warning__perl_5_8_2">WARNING: PERL 5.8.2</a><a name="__H1_6__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_5__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;PREREQUISITES</td>
+<tr><td><a name="warning__perl_5_8_2">WARNING: PERL 5.8.2</a><a name="__H1_7__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_6__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;PREREQUISITES</td>
 </tr></table>
 <p>If you are using perl 5.8.2 you may get a series of errors
 in the http/error_log such as:</p>
@@ -198,8 +224,8 @@ the problem is manifested in 5.8.2.</p>
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="flush_buffer_and_redirects">FLUSH BUFFER AND REDIRECTS</a><a name="__H1_7__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_6__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;WARNING: PERL 5.8.2</td>
+<tr><td><a name="flush_buffer_and_redirects">FLUSH BUFFER AND REDIRECTS</a><a name="__H1_8__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_7__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;WARNING: PERL 5.8.2</td>
 </tr></table>
 <p>I have 'subclassed' HTML::Mason::Request (as MasonX::Request2) and
 HTML::Mason::Buffer (as MasonX::Buffer2) to change handling of buffer
@@ -215,8 +241,8 @@ have redirect problems). The print STDERR's appear in the Apache log.</p>
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="configuration">CONFIGURATION</a><a name="__H1_8__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_7__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;FLUSH BUFFER AND REDIRECTS</td>
+<tr><td><a name="configuration">CONFIGURATION</a><a name="__H1_9__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_8__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;FLUSH BUFFER AND REDIRECTS</td>
 </tr></table>
 <p>Configuring your Mason system may be done in many different ways;
 please refer to the Mason documentation, specifically, the Administrator's
@@ -233,7 +259,7 @@ found in the <strong>eg/</strong> subdirectory of this distribution.</p>
 width="100%">
 <tr>
 <td><a name="all_configuration_in_the__httpd_conf__file">All Configuration in the 'httpd.conf' File</a><a name="__H2_1__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_8__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;CONFIGURATION</td>
+<td align="right" class="ref_back_color"><a href="#__H1_9__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;CONFIGURATION</td>
 </tr></table>
 
 <p>The sample httpd.conf file may be found at <strong>eg/httpd-mason-simple.conf</strong>.
@@ -312,7 +338,7 @@ this modules must be loaded within the HTML::Mason::Commands name space.</p>
       PerlSetVar MasonRequestClass          MasonX::Request::WithApache2Session
       PerlSetVar MasonSessionAllowInvalidId yes
       PerlSetVar MasonSessionCookieName     beaucox-bctest-cookie
-      PerlSetVar MasonSessionCookieDomain   .beaucox.com
+      PerlSetVar MasonSessionCookieDomain   beaucox.com
       PerlSetVar MasonSessionCookieExpires  +7d
       PerlSetVar MasonSessionClass          Apache::Session::MySQL
       PerlSetVar MasonSessionDataSource     dbi:mysql:bctest_sessions
@@ -348,7 +374,7 @@ For mod_perl2 compatibility,
 width="100%">
 <tr>
 <td><a name="configuration_with_scripts">Configuration with Scripts</a><a name="__H2_2__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_8__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;CONFIGURATION</td>
+<td align="right" class="ref_back_color"><a href="#__H1_9__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;CONFIGURATION</td>
 </tr></table>
 
 <p>In this example, you must manage the http.conf file and two
@@ -608,8 +634,8 @@ modify or omit these statements.</p>
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="stress_testing">STRESS TESTING</a><a name="__H1_9__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_8__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;CONFIGURATION</td>
+<tr><td><a name="stress_testing">STRESS TESTING</a><a name="__H1_10__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_9__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;CONFIGURATION</td>
 </tr></table>
 <p>To see if your server works under load, you must do some stress testing.
 There are several Apache Test modules on CPAN, but if you are lazy
@@ -621,7 +647,7 @@ try my simple test scripts.</p>
 width="100%">
 <tr>
 <td><a name="stress_pl">stress.pl</a><a name="__H2_3__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_9__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;STRESS TESTING</td>
+<td align="right" class="ref_back_color"><a href="#__H1_10__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;STRESS TESTING</td>
 </tr></table>
 
 <p>A stress script is in the MasonX::Apache2Handler distribution at
@@ -638,7 +664,7 @@ Usage:</p>
 width="100%">
 <tr>
 <td><a name="httpdmem_pl">httpd-mem,pl</a><a name="__H2_4__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_9__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;STRESS TESTING</td>
+<td align="right" class="ref_back_color"><a href="#__H1_10__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;STRESS TESTING</td>
 </tr></table>
 
 <p>To check for memory leaks, try <strong>scripts/httpd-mem.pl</strong>. This script finds
@@ -664,8 +690,8 @@ printed to the terminal and <strong>httpd-mem.log</strong>:</p>
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="mod_perl2_all_the_way">mod_perl2 ALL THE WAY</a><a name="__H1_10__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_9__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;STRESS TESTING</td>
+<tr><td><a name="mod_perl2_all_the_way">mod_perl2 ALL THE WAY</a><a name="__H1_11__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_10__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;STRESS TESTING</td>
 </tr></table>
 <p>If you want to take the next step, making a pure mod_perl2 site,
 you should:</p>
@@ -727,8 +753,8 @@ I suppose the port could be a bear if you have a mature site with lots of
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="don_t">DON'T</a><a name="__H1_11__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_10__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;mod_perl2 ALL THE WAY</td>
+<tr><td><a name="don_t">DON'T</a><a name="__H1_12__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_11__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;mod_perl2 ALL THE WAY</td>
 </tr></table>
 <dl>
 <dt><strong><a name="item_mix_and_match_normal_masonx_3a_3a_2e_2e_2e_modules">Mix and Match normal MasonX::... modules with MasonX::Apache2Handler</a></strong><br />
@@ -750,8 +776,8 @@ by me, not the Mason developers. Talk to me ( &lt;<a href="mailto:mason@beaucox.
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="do">DO</a><a name="__H1_12__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_11__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;DON'T</td>
+<tr><td><a name="do">DO</a><a name="__H1_13__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_12__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;DON'T</td>
 </tr></table>
 <dl>
 <dt><strong><a name="item_try_it_21">Try it!</a></strong><br />
@@ -771,8 +797,8 @@ bug reports, and, yes, even mild flames.
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="todo">TODO</a><a name="__H1_13__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_12__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;DO</td>
+<tr><td><a name="todo">TODO</a><a name="__H1_14__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_13__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;DO</td>
 </tr></table>
 <dl>
 <dt><strong><a name="item_build_tests">Build tests</a></strong><br />
@@ -803,29 +829,49 @@ let me know.
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="bugs">BUGS</a><a name="__H1_14__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_13__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;TODO</td>
+<tr><td><a name="a_completely_ot_comment_on__masonsessioncookiedomain_">A COMPLETELY OT COMMENT ON 'MasonSessionCookieDomain'</a><a name="__H1_15__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_14__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;TODO</td>
+</tr></table>
+<p>As an aside, I have found that some browsers, mainly Mozilla, cannot
+cope with the leading 'dot' in the '-domain' parameter sent in the
+'Set-Cookie' header (you specify the '-domain' in the
+'MasonSessionCookieDomain' configuration directive or the
+'session_cookie_domain' parameter in your handler). I suggest you
+leave it out, i.e. change:</p>
+<pre>
+    .beaucox.com</pre>
+<p>to:</p>
+<pre>
+    beaucox.com</pre>
+<p>This makes Mozilla happy and works on the other browsers I have
+tested (IE, Konqueror).</p>
+<p>
+</p>
+<table class="h1table" cellspacing="0" cellpadding="0" border="0"
+width="100%">
+<tr><td><a name="bugs">BUGS</a><a name="__H1_16__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_15__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;A COMPLETELY OT COMMENT ON 'MasonSessionCookieDomain'</td>
 </tr></table>
 <p>Too early to tell; they are bound to come in as people give it a try.</p>
 <p>
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="author">AUTHOR</a><a name="__H1_15__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_14__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;BUGS</td>
+<tr><td><a name="author">AUTHOR</a><a name="__H1_17__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_16__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;BUGS</td>
 </tr></table>
 <p>Beau E. Cox &lt;<a href="mailto:mason@beaucox.com">mason@beaucox.com</a>&gt; <a href="http://beaucox.com">http://beaucox.com</a>.</p>
 <p>The real authors (I just made mod_perl2 changes) are the Mason crew, including:
 Jonathan Swartz &lt;<a href="mailto:swartz@pobox.com">swartz@pobox.com</a>&gt;,
 Dave Rolsky &lt;<a href="mailto:autarch@urth.org">autarch@urth.org</a>&gt;,
 Ken Williams &lt;<a href="mailto:ken@mathforum.org">ken@mathforum.org</a>&gt;.</p>
-<p>Version 0.04 as of March 21, 2004.</p>
+<p>Version 0.05 as of April 13, 2004.</p>
 <p>
 </p>
 <table class="h1table" cellspacing="0" cellpadding="0" border="0"
 width="100%">
-<tr><td><a name="see_also">SEE ALSO</a><a name="__H1_16__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
-<td align="right" class="ref_back_color"><a href="#__H1_15__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;AUTHOR</td>
+<tr><td><a name="see_also">SEE ALSO</a><a name="__H1_18__">&nbsp;&nbsp;</a><a href="#__index__"><img alt="top" src="up.gif" border="0" /></a></td>
+<td align="right" class="ref_back_color"><a href="#__H1_17__"><img alt="top" src="up.gif" border="0" /></a>&nbsp;&nbsp;AUTHOR</td>
 </tr></table>
 <p>My documents, including:
 <a href="/mason/docs/./Apache2Handler.html">MasonX::Apache2Handler</a>,

@@ -1,11 +1,11 @@
---- /home/test/src/mason/HTML-Mason-1.25/lib/HTML/Mason/ApacheHandler.pm	2003-12-12 11:08:13.000000000 -1000
-+++ /home/test/src/mason/MasonX-Apache2Handler/lib/MasonX/Apache2Handler.pm	2004-03-21 16:36:46.122940080 -1000
+--- /home/test/src/mason/HTML-Mason-1.26/lib/HTML/Mason/ApacheHandler.pm	2004-04-05 12:32:33.000000000 -1000
++++ /home/test/src/mason/MasonX-Apache2Handler-0.05/lib/MasonX/Apache2Handler.pm	2004-04-11 12:02:16.000000000 -1000
 @@ -1,3 +1,17 @@
 +#------------------------------------------------------------------------
 +# Changes to HTML::Mason::ApacheHandler for Apache2/mod_perl 2.
 +#
 +# Beau E. Cox <beau@beaucox.com>
-+# March 2004
++# April 2004
 +#
 +# Changes (C)Copyright 2004 Beau E. Cox.
 +#
@@ -144,7 +144,7 @@
  use vars qw($VERSION);
  
 -$VERSION = 1.69;
-+$VERSION = 0.04;
++$VERSION = 0.05;
  
  use Class::Container;
  use base qw(Class::Container);
@@ -257,16 +257,22 @@
   %valid    # Contains default values for member data
  </%args>
  EOF
-@@ -807,7 +841,7 @@
+@@ -805,11 +839,9 @@
+     # Apache::Request object to a variable currently containing a
+     # plain Apache object, we leak memory.  This means we'd have to
      # use multiple variables to avoid this, which is annoying.
-     my $r =
-         $r_sub->( $self->args_method eq 'mod_perl' ?
+-    my $r =
+-        $r_sub->( $self->args_method eq 'mod_perl' ?
 -                  Apache::Request->instance( $_[0] ) :
-+                  Apache::Request->new( $_[0] ) :
-                   $_[0]
-                 );
+-                  $_[0]
+-                );
++
++    # for mod_perl2 just pickup Apache::RequestRec
++    my $r = $_[0];
  
-@@ -826,7 +860,7 @@
+     my $interp = $self->interp;
+ 
+@@ -826,7 +858,7 @@
  
      if ($is_dir) {
  	if ($self->decline_dirs) {
@@ -275,7 +281,7 @@
  	} else {
  	    $r->content_type(undef);
  	}
-@@ -880,7 +914,8 @@
+@@ -880,7 +912,8 @@
  	my $retval = isa_mason_exception($err, 'Abort')   ? $err->aborted_value  :
  		     isa_mason_exception($err, 'Decline') ? $err->declined_value :
  		     rethrow_exception $err;
@@ -285,7 +291,7 @@
  	return $retval;
      }
  
-@@ -896,10 +931,11 @@
+@@ -896,10 +929,11 @@
  	# Send headers if they have not been sent by us or by user.
          # We use instance here because if we store $request we get a
          # circular reference and a big memory leak.
@@ -301,6 +307,18 @@
  	    $sent_headers = 1;
  	}
  
+@@ -959,8 +993,10 @@
+ #
+ sub _mod_perl_args
+ {
+-    my ($self, $apr, $request) = @_;
++    my ($self, $r, $request) = @_;
+ 
++    # for mod_perl2, get back to Apache::Request from Apache::RequestRec
++    my $apr = Apache::Request->new( $r );
+     my %args;
+     foreach my $key ( $apr->param ) {
+ 	my @values = $apr->param($key);
 @@ -973,7 +1009,7 @@
  #
  # Determines whether the http header has been sent.
@@ -377,54 +395,54 @@
 -visible via Apache::Status.
 -
 -=item args_method
--
++B<MasonX::Apache2Handler is highly experimental ( alpha ) and
++should only be used in a test environment.>
+ 
 -Method to use for unpacking GET and POST arguments. The valid options
 -are 'CGI' and 'mod_perl'; these indicate that a C<CGI.pm> or
 -C<Apache::Request> object (respectively) will be created for the
 -purposes of argument handling.
-+B<MasonX::Apache2Handler is highly experimental ( alpha ) and
-+should only be used in a test environment.>
- 
--'mod_perl' is the default and requires that you have installed the
--C<Apache::Request> package.
 +MasonX::Apache2Handler is a clone of HTML::Mason::ApacheHandler
 +changed to work under a pure mod_perl2 environment. The external
 +interface is unchanged, see
 +L<HTML::Mason::ApacheHandler|ApacheHandler>.
  
+-'mod_perl' is the default and requires that you have installed the
+-C<Apache::Request> package.
++The actual changes I made can be found in the distribution in
++B<diff/ApacheHandler.diff> ( made with 'diff -Naru' ... ).
+ 
 -If args_method is 'mod_perl', the C<$r> global is upgraded to an
 -Apache::Request object. This object inherits all Apache methods and
 -adds a few of its own, dealing with parameters and file uploads.  See
 -C<Apache::Request> for more information.
-+The actual changes I made can be found in the distribution in
-+B<diff/ApacheHandler.diff> ( made with 'diff -Naru' ... ).
++A HOTWO for MasonX::Apache2Handler may be found at
++L<HOWTO Run Mason with mod_perl2|Mason-with-mod_perl2>.
  
 -If the args_method is 'CGI', the Mason request object (C<$m>) will have a
 -method called C<cgi_object> available.  This method returns the CGI
 -object used for argument processing.
-+A HOTWO for MasonX::Apache2Handler may be found at
-+L<HOWTO Run Mason with mod_perl2|Mason-with-mod_perl2>.
++=head1 PREREQUISITES
  
 -While Mason will load C<Apache::Request> or C<CGI> as needed at runtime, it
 -is recommended that you preload the relevant module either in your
 -F<httpd.conf> or F<handler.pl> file, as this will save some memory.
-+=head1 PREREQUISITES
++You must have the following packages installed:
  
 -=item decline_dirs
-+You must have the following packages installed:
++    mod_perl        => 1.9910
++    HTML::Mason'    => 1.25
++    libapreq2       => 2.02-dev
  
 -True or false, default is true. Indicates whether Mason should decline
 -directory requests, leaving Apache to serve up a directory index or a
 -C<FORBIDDEN> error as appropriate. See the L<allowing directory requests|HTML::Mason::Admin/allowing directory requests> section of the administrator's manual
 -for more information about handling directories with Mason.
-+    mod_perl        => 1.9910
-+    HTML::Mason'    => 1.25
-+    libapreq2       => 2.02-dev
- 
--=item interp
 +Please refer to the original packages' documentation
 +for instructions.
  
+-=item interp
+-
 -The interpreter object to associate with this compiler. By default a
 -new object of the specified L<interp_class|HTML::Mason::Params/interp_class> will be created.
 -
@@ -518,6 +536,6 @@
 -L<HTML::Mason|HTML::Mason>,
 -L<HTML::Mason::Admin|HTML::Mason::Admin>,
 -L<HTML::Mason::Interp|HTML::Mason::Interp>
-+Version 0.01 as of January, 2004.
++Version 0.05 as of April, 2004.
  
  =cut

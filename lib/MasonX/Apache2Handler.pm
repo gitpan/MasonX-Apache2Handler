@@ -2,7 +2,7 @@
 # Changes to HTML::Mason::ApacheHandler for Apache2/mod_perl 2.
 #
 # Beau E. Cox <beau@beaucox.com>
-# March 2004
+# April 2004
 #
 # Changes (C)Copyright 2004 Beau E. Cox.
 #
@@ -291,7 +291,7 @@ if ( $mod_perl::VERSION < 1.99 )
 
 use vars qw($VERSION);
 
-$VERSION = 0.04;
+$VERSION = 0.05;
 
 use Class::Container;
 use base qw(Class::Container);
@@ -839,11 +839,9 @@ sub prepare_request
     # Apache::Request object to a variable currently containing a
     # plain Apache object, we leak memory.  This means we'd have to
     # use multiple variables to avoid this, which is annoying.
-    my $r =
-        $r_sub->( $self->args_method eq 'mod_perl' ?
-                  Apache::Request->new( $_[0] ) :
-                  $_[0]
-                );
+
+    # for mod_perl2 just pickup Apache::RequestRec
+    my $r = $_[0];
 
     my $interp = $self->interp;
 
@@ -995,8 +993,10 @@ sub _cgi_args
 #
 sub _mod_perl_args
 {
-    my ($self, $apr, $request) = @_;
+    my ($self, $r, $request) = @_;
 
+    # for mod_perl2, get back to Apache::Request from Apache::RequestRec
+    my $apr = Apache::Request->new( $r );
     my %args;
     foreach my $key ( $apr->param ) {
 	my @values = $apr->param($key);
@@ -1113,6 +1113,6 @@ Jonathan Swartz <swartz@pobox.com>,
 Dave Rolsky <autarch@urth.org>,
 Ken Williams <ken@mathforum.org>.
 
-Version 0.01 as of January, 2004.
+Version 0.05 as of April, 2004.
 
 =cut

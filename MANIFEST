@@ -7,6 +7,7 @@ eg/Apache2Handler.pm
 eg/httpd-mason-simple.conf
 eg/httpd-mason.conf
 eg/startup2.pl
+eg/request-examiner.html
 htdocs/ApacheHandler.html
 htdocs/ApacheHandler.txt
 htdocs/Apache2Handler.html

@@ -50,5 +50,5 @@ AUTHOR
     including: Jonathan Swartz <swartz@pobox.com>, Dave Rolsky
     <autarch@urth.org>, Ken Williams <ken@mathforum.org>.
 
-    Version 0.01 as of January, 2004.
+    Version 0.05 as of April, 2004.
 

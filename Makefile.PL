@@ -7,10 +7,12 @@ print <<"*EOF*";
 -----------------------------------------------------------
     MasonX::Apache2Handler is an EXPERIMENTAL BETA RELEASE!
        Please install and use it only on a test system.
+    (But it really, really works! The brave-hearted can use
+                    it in production.)
                       Aloha => Beau;
 -----------------------------------------------------------
 *EOF*
-    sleep 5;
+    sleep 3;
 
 WriteMakefile(
     NAME              => 'MasonX::Apache2Handler',
